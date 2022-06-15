@@ -36,26 +36,49 @@ const options = ref<Options>({
             <div class="option">
                 <h3>Gender</h3>
                 <div class="buttons-container">
-                    <button :class="options.gender === Gender.MALE && 'active'">Male</button>
-                    <button :class="options.gender === Gender.UNISEX && 'active'">Unisex</button>
-                    <button :class="options.gender === Gender.FEMALE && 'active'">Female</button>
+                    <button :class="options.gender === Gender.MALE && 'active'" @click="options.gender = Gender.MALE">
+                        Male
+                    </button>
+                    <button :class="options.gender === Gender.UNISEX && 'active'" @click="options.gender = Gender.UNISEX">
+                        Unisex
+                    </button>
+                    <button :class="options.gender === Gender.FEMALE && 'active'" @click="options.gender = Gender.FEMALE">
+                        Female
+                    </button>
                 </div>
             </div>
             <div class="option">
                 <h3>Popularity</h3>
                 <div class="buttons-container">
-                    <button :class="options.popularity === Popularity.TRENDY && 'active'">Trendy</button>
-                    <button :class="options.popularity === Popularity.UNIQUE && 'active'">Unique</button>
+                    <button
+                        :class="options.popularity === Popularity.TRENDY && 'active'"
+                        @click="options.popularity = Popularity.TRENDY"
+                    >
+                        Trendy
+                    </button>
+                    <button
+                        :class="options.popularity === Popularity.UNIQUE && 'active'"
+                        @click="options.popularity = Popularity.UNIQUE"
+                    >
+                        Unique
+                    </button>
                 </div>
             </div>
             <div class="option">
                 <h3>Length</h3>
                 <div class="buttons-container">
-                    <button :class="options.length === Length.LONG && 'active'">Long</button>
-                    <button :class="options.length === Length.FULL && 'active'">Full</button>
-                    <button :class="options.length === Length.SHORT && 'active'">Short</button>
+                    <button :class="options.length === Length.LONG && 'active'" @click="options.length = Length.LONG">
+                        Long
+                    </button>
+                    <button :class="options.length === Length.FULL && 'active'" @click="options.length = Length.FULL">
+                        Full
+                    </button>
+                    <button :class="options.length === Length.SHORT && 'active'" @click="options.length = Length.SHORT">
+                        Short
+                    </button>
                 </div>
             </div>
+            <button class="main">Generate</button>
         </div>
     </div>
 </template>
@@ -117,6 +140,21 @@ body {
             background-color: #0faf87;
             color: white;
         }
+    }
+}
+
+button {
+    &.main {
+        color: #0faf87;
+        background: white;
+        border-radius: 6.5rem;
+        border: none;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        padding: 0.75rem 4rem;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-top: 1rem;
+        cursor: pointer;
     }
 }
 </style>
