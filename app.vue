@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Gender, Popularity, Length, nameData } from '@/data';
+import { Gender, Popularity, Length, nameData, nameColors } from '@/data';
 
 interface Options {
     gender: Gender;
@@ -29,6 +29,25 @@ const generateNames = () => {
 
     names.value = filteredNames.map((n) => n.name);
 };
+
+onUpdated(() => {
+    watch(
+        names,
+        () => {
+            for (const name of names.value) {
+                const nameCard: HTMLElement = document.querySelector(`#${name}`);
+                console.log(nameCard);
+                if (nameCard) {
+                    const index: number = Math.floor(Math.random() * nameColors.length);
+                    nameCard.style.color = nameColors[index];
+                }
+            }
+        },
+        {
+            flush: 'post',
+        }
+    );
+});
 </script>
 
 <template>
@@ -38,7 +57,12 @@ const generateNames = () => {
             <div class="option">
                 <h3>Gender</h3>
                 <div class="buttons-container">
-                    <button v-for="gen in Gender" :class="gen === options.gender && 'active'" @click="options.gender = gen">
+                    <button
+                        v-for="gen in Gender"
+                        :key="gen"
+                        :class="gen === options.gender && 'active'"
+                        @click="options.gender = gen"
+                    >
                         {{ upperCaseFirstLetter(gen) }}
                     </button>
                 </div>
@@ -48,6 +72,7 @@ const generateNames = () => {
                 <div class="buttons-container">
                     <button
                         v-for="pop in Popularity"
+                        :key="pop"
                         :class="pop === options.popularity && 'active'"
                         @click="options.popularity = pop"
                     >
@@ -58,26 +83,58 @@ const generateNames = () => {
             <div class="option">
                 <h3>Length</h3>
                 <div class="buttons-container">
-                    <button v-for="len in Length" :class="len === options.length && 'active'" @click="options.length = len">
+                    <button
+                        v-for="len in Length"
+                        :key="len"
+                        :class="len === options.length && 'active'"
+                        @click="options.length = len"
+                    >
                         {{ upperCaseFirstLetter(len) }}
                     </button>
                 </div>
             </div>
             <button class="main" @click="generateNames">Generate</button>
         </div>
-        {{ names }}
+        <div class="cards-container">
+            <div v-for="name in names" :key="name" class="card" :id="name">
+                <p>{{ name }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss">
-body {
+$slite-black: #444;
+$vue-green: #0faf87;
+
+@mixin bg-green-gradient {
     background: rgb(51, 240, 250);
     background: linear-gradient(90deg, rgba(51, 240, 250, 0.6) 0%, rgba(0, 255, 19, 0.2) 100%);
 }
 
+body {
+    @include bg-green-gradient;
+}
+
+button {
+    &.main {
+        color: $vue-green;
+        background: white;
+        border-radius: 6.5rem;
+        border: none;
+        outline: 0;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        padding: 0.75rem 4rem;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-top: 1rem;
+        cursor: pointer;
+    }
+}
+
 .container {
     font-family: Arial, Helvetica, sans-serif;
-    color: #444;
+    color: $slite-black;
     max-width: 50rem;
     margin: 0 auto;
     text-align: center;
@@ -88,14 +145,14 @@ body {
 }
 
 .options-container {
-    background: rgb(51, 240, 250);
-    background: linear-gradient(90deg, rgba(51, 240, 250, 0.7) 0%, rgba(0, 255, 19, 0.2) 100%);
+    @include bg-green-gradient;
     border-radius: 2rem;
     padding: 1rem;
     widows: 95%;
     margin: 0 auto;
     margin-top: 4rem;
     position: relative;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
     .option {
         margin-bottom: 2rem;
@@ -104,9 +161,9 @@ body {
 
 .buttons-container {
     button {
-        color: #444;
+        color: $slite-black;
         background-color: white;
-        outline: 0.15rem solid #0faf87;
+        outline: 0.15rem solid $vue-green;
         border: none;
         padding: 0.75rem;
         width: 12rem;
@@ -123,25 +180,28 @@ body {
         }
 
         &.active {
-            background-color: #0faf87;
+            background-color: $vue-green;
             color: white;
         }
     }
 }
 
-button {
-    &.main {
-        color: #0faf87;
-        background: white;
-        border-radius: 6.5rem;
-        border: none;
-        outline: 0;
-        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-        padding: 0.75rem 4rem;
-        font-size: 1rem;
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+
+    .card {
+        @include bg-green-gradient;
+        width: 28%;
+        color: mediumvioletred;
         font-weight: bold;
-        margin-top: 1rem;
-        cursor: pointer;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-right: 0.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
     }
 }
 </style>
