@@ -1,20 +1,5 @@
 <script setup lang="ts">
-enum Gender {
-    MALE = 'male',
-    UNISEX = 'unisex',
-    FEMALE = 'female',
-}
-
-enum Popularity {
-    TRENDY = 'trendy',
-    UNIQUE = 'unique',
-}
-
-enum Length {
-    LONG = 'long',
-    FULL = 'full',
-    SHORT = 'short',
-}
+import { Gender, Popularity, Length, nameData } from '@/data';
 
 interface Options {
     gender: Gender;
@@ -27,6 +12,23 @@ const options = ref<Options>({
     popularity: Popularity.TRENDY,
     length: Length.LONG,
 });
+
+const names = ref<string[]>([]);
+
+const upperCaseFirstLetter = (s: string) => {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+const generateNames = () => {
+    const filteredNames = nameData.filter(
+        (n) =>
+            n.gender === options.value.gender &&
+            n.popularity === options.value.popularity &&
+            (options.value.length === Length.ALL ? true : n.length === options.value.length)
+    );
+
+    names.value = filteredNames.map((n) => n.name);
+};
 </script>
 
 <template>
@@ -36,14 +38,8 @@ const options = ref<Options>({
             <div class="option">
                 <h3>Gender</h3>
                 <div class="buttons-container">
-                    <button :class="options.gender === Gender.MALE && 'active'" @click="options.gender = Gender.MALE">
-                        Male
-                    </button>
-                    <button :class="options.gender === Gender.UNISEX && 'active'" @click="options.gender = Gender.UNISEX">
-                        Unisex
-                    </button>
-                    <button :class="options.gender === Gender.FEMALE && 'active'" @click="options.gender = Gender.FEMALE">
-                        Female
+                    <button v-for="gen in Gender" :class="gen === options.gender && 'active'" @click="options.gender = gen">
+                        {{ upperCaseFirstLetter(gen) }}
                     </button>
                 </div>
             </div>
@@ -51,35 +47,25 @@ const options = ref<Options>({
                 <h3>Popularity</h3>
                 <div class="buttons-container">
                     <button
-                        :class="options.popularity === Popularity.TRENDY && 'active'"
-                        @click="options.popularity = Popularity.TRENDY"
+                        v-for="pop in Popularity"
+                        :class="pop === options.popularity && 'active'"
+                        @click="options.popularity = pop"
                     >
-                        Trendy
-                    </button>
-                    <button
-                        :class="options.popularity === Popularity.UNIQUE && 'active'"
-                        @click="options.popularity = Popularity.UNIQUE"
-                    >
-                        Unique
+                        {{ upperCaseFirstLetter(pop) }}
                     </button>
                 </div>
             </div>
             <div class="option">
                 <h3>Length</h3>
                 <div class="buttons-container">
-                    <button :class="options.length === Length.LONG && 'active'" @click="options.length = Length.LONG">
-                        Long
-                    </button>
-                    <button :class="options.length === Length.FULL && 'active'" @click="options.length = Length.FULL">
-                        Full
-                    </button>
-                    <button :class="options.length === Length.SHORT && 'active'" @click="options.length = Length.SHORT">
-                        Short
+                    <button v-for="len in Length" :class="len === options.length && 'active'" @click="options.length = len">
+                        {{ upperCaseFirstLetter(len) }}
                     </button>
                 </div>
             </div>
-            <button class="main">Generate</button>
+            <button class="main" @click="generateNames">Generate</button>
         </div>
+        {{ names }}
     </div>
 </template>
 
@@ -149,6 +135,7 @@ button {
         background: white;
         border-radius: 6.5rem;
         border: none;
+        outline: 0;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
         padding: 0.75rem 4rem;
         font-size: 1rem;
