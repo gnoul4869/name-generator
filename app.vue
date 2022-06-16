@@ -30,24 +30,21 @@ const generateNames = () => {
     names.value = filteredNames.map((n) => n.name);
 };
 
-onUpdated(() => {
-    watch(
-        names,
-        () => {
-            for (const name of names.value) {
-                const nameCard: HTMLElement = document.querySelector(`#${name}`);
-                console.log(nameCard);
-                if (nameCard) {
-                    const index: number = Math.floor(Math.random() * nameColors.length);
-                    nameCard.style.color = nameColors[index];
-                }
+watch(
+    names,
+    () => {
+        for (const name of names.value) {
+            const nameCard: HTMLElement = document.querySelector(`#${name}`);
+            if (nameCard) {
+                const index: number = Math.floor(Math.random() * nameColors.length);
+                nameCard.style.color = nameColors[index];
             }
-        },
-        {
-            flush: 'post',
         }
-    );
-});
+    },
+    {
+        flush: 'post',
+    }
+);
 </script>
 
 <template>
@@ -97,7 +94,7 @@ onUpdated(() => {
         </div>
         <div class="cards-container">
             <div v-for="name in names" :key="name" class="card" :id="name">
-                <p>{{ name }}</p>
+                <h4>{{ name }}</h4>
             </div>
         </div>
     </div>
@@ -190,17 +187,15 @@ button {
     display: flex;
     flex-wrap: wrap;
     margin-top: 3rem;
+    justify-content: center;
 
     .card {
         @include bg-green-gradient;
         width: 28%;
         color: mediumvioletred;
-        font-weight: bold;
         border-radius: 1rem;
-        padding: 1rem;
-        margin-right: 0.5rem;
-        margin-bottom: 1rem;
-        position: relative;
+        padding: 0.5rem;
+        margin: 0.75rem;
         box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
     }
 }
