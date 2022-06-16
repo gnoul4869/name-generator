@@ -1,0 +1,9 @@
+@mixin bg-green-gradient {
+    background: rgb(51, 240, 250);
+    background: linear-gradient(90deg, rgba(51, 240, 250, 0.6) 0%, rgba(0, 255, 19, 0.2) 100%);
+}
+
+@mixin font($size, $weight) {
+    font-size: $size;
+    font-weight: $weight;
+}

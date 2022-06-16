@@ -268,7 +268,7 @@ export const nameData: Name[] = [
     },
 ];
 
-export const nameColors: string[] = [
+export const colors: string[] = [
     // 'AliceBlue',
     // 'AntiqueWhite',
     // 'Aqua',
@@ -384,7 +384,7 @@ export const nameColors: string[] = [
     // 'PapayaWhip',
     // 'PeachPuff',
     'Peru',
-    'Pink',
+    // 'Pink',
     'Plum',
     // 'PowderBlue',
     'Purple',
@@ -415,6 +415,6 @@ export const nameColors: string[] = [
     // 'Wheat',
     // 'White',
     // 'WhiteSmoke',
-    'Yellow',
+    // 'Yellow',
     // 'YellowGreen',
 ];

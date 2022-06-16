@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Gender, Popularity, Length, nameData, nameColors } from '@/data';
+import { Gender, Popularity, Length, nameData, colors } from '@/data';
 
 interface Options {
     gender: Gender;
@@ -15,9 +15,24 @@ const options = ref<Options>({
 
 const names = ref<string[]>([]);
 
-const upperCaseFirstLetter = (s: string) => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-};
+interface OptionsData {
+    id: number;
+    type: string;
+    buttons: Gender[] | Popularity[] | Length[];
+}
+
+const optionsData = computed<OptionsData[]>(() =>
+    Object.keys(options.value).map((opt, idx) => {
+        const buttons =
+            opt === 'gender' ? Object.values(Gender) : opt === 'popularity' ? Object.values(Popularity) : Object.values(Length);
+
+        return {
+            id: idx,
+            type: opt,
+            buttons,
+        };
+    })
+);
 
 const generateNames = () => {
     const filteredNames = nameData.filter(
@@ -36,8 +51,8 @@ watch(
         for (const name of names.value) {
             const nameCard: HTMLElement = document.querySelector(`#${name}`);
             if (nameCard) {
-                const index: number = Math.floor(Math.random() * nameColors.length);
-                nameCard.style.color = nameColors[index];
+                const index: number = Math.floor(Math.random() * colors.length);
+                nameCard.style.color = colors[index];
             }
         }
     },
@@ -51,44 +66,8 @@ watch(
     <div class="container">
         <h1>Name Generator</h1>
         <div class="options-container">
-            <div class="option">
-                <h3>Gender</h3>
-                <div class="buttons-container">
-                    <button
-                        v-for="gen in Gender"
-                        :key="gen"
-                        :class="gen === options.gender && 'active'"
-                        @click="options.gender = gen"
-                    >
-                        {{ upperCaseFirstLetter(gen) }}
-                    </button>
-                </div>
-            </div>
-            <div class="option">
-                <h3>Popularity</h3>
-                <div class="buttons-container">
-                    <button
-                        v-for="pop in Popularity"
-                        :key="pop"
-                        :class="pop === options.popularity && 'active'"
-                        @click="options.popularity = pop"
-                    >
-                        {{ upperCaseFirstLetter(pop) }}
-                    </button>
-                </div>
-            </div>
-            <div class="option">
-                <h3>Length</h3>
-                <div class="buttons-container">
-                    <button
-                        v-for="len in Length"
-                        :key="len"
-                        :class="len === options.length && 'active'"
-                        @click="options.length = len"
-                    >
-                        {{ upperCaseFirstLetter(len) }}
-                    </button>
-                </div>
+            <div v-for="option in optionsData" :key="option.id">
+                <Option :option="option" :options="options" />
             </div>
             <button class="main" @click="generateNames">Generate</button>
         </div>
@@ -101,18 +80,7 @@ watch(
 </template>
 
 <style lang="scss">
-$slite-black: #444;
-$vue-green: #0faf87;
-
-@mixin bg-green-gradient {
-    background: rgb(51, 240, 250);
-    background: linear-gradient(90deg, rgba(51, 240, 250, 0.6) 0%, rgba(0, 255, 19, 0.2) 100%);
-}
-
-@mixin font($size, $weight) {
-    font-size: $size;
-    font-weight: $weight;
-}
+@import '@/assets/styles';
 
 body {
     @include bg-green-gradient;
@@ -154,36 +122,6 @@ button {
     margin-top: 4rem;
     position: relative;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-    .option {
-        margin-bottom: 2rem;
-    }
-}
-
-.buttons-container {
-    button {
-        @include font(1rem, bold);
-        color: $slite-black;
-        background-color: white;
-        outline: 0.15rem solid $vue-green;
-        border: none;
-        padding: 0.75rem;
-        width: 12rem;
-        cursor: pointer;
-
-        &:first-child {
-            border-radius: 1rem 0 0 1rem;
-        }
-
-        &:last-child {
-            border-radius: 0 1rem 1rem 0;
-        }
-
-        &.active {
-            background-color: $vue-green;
-            color: white;
-        }
-    }
 }
 
 .cards-container {
