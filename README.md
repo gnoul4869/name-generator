@@ -1,5 +1,5 @@
 # Name Generator
-A name generator written in Nuxt.js 3
+A application that generates names based on your choices.
 
 # Nuxt 3 Minimal Starter
 
