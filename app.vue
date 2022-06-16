@@ -109,12 +109,18 @@ $vue-green: #0faf87;
     background: linear-gradient(90deg, rgba(51, 240, 250, 0.6) 0%, rgba(0, 255, 19, 0.2) 100%);
 }
 
+@mixin font($size, $weight) {
+    font-size: $size;
+    font-weight: $weight;
+}
+
 body {
     @include bg-green-gradient;
 }
 
 button {
     &.main {
+        @include font(1rem, bold);
         color: $vue-green;
         background: white;
         border-radius: 6.5rem;
@@ -122,8 +128,6 @@ button {
         outline: 0;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
         padding: 0.75rem 4rem;
-        font-size: 1rem;
-        font-weight: bold;
         margin-top: 1rem;
         cursor: pointer;
     }
@@ -158,14 +162,13 @@ button {
 
 .buttons-container {
     button {
+        @include font(1rem, bold);
         color: $slite-black;
         background-color: white;
         outline: 0.15rem solid $vue-green;
         border: none;
         padding: 0.75rem;
         width: 12rem;
-        font-size: 1rem;
-        font-weight: bold;
         cursor: pointer;
 
         &:first-child {
@@ -191,8 +194,8 @@ button {
 
     .card {
         @include bg-green-gradient;
+        color: $slite-black;
         width: 28%;
-        color: mediumvioletred;
         border-radius: 1rem;
         padding: 0.5rem;
         margin: 0.75rem;
